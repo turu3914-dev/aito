@@ -4,6 +4,7 @@
 
 使い方:
     python スクリプト/ボイスメモ文字起こし.py
+    python scripts/transcribe_voice_memos.py  (旧コマンドとの互換用)
 
 要約や補足はこのスクリプトでは行わない。文字起こし結果を
 Claude に読ませて、記録/要約.md 等に要約を書かせる想定。
@@ -16,19 +17,25 @@ from datetime import datetime
 AUDIO_EXTS = {".m4a", ".mp3", ".wav", ".mp4", ".ogg", ".flac", ".aac", ".wma"}
 
 ROOT = Path(__file__).resolve().parent.parent
-INPUT_DIR = ROOT / "音声メモ"
+INPUT_DIRS = (
+    ROOT / "音声メモ",
+    ROOT / "voice_memos",  # 旧フォルダとの互換用
+)
 OUTPUT_DIR = ROOT / "記録" / "音声"
 
 
 def find_unprocessed():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     files = []
-    for p in sorted(INPUT_DIR.iterdir()):
-        if p.suffix.lower() not in AUDIO_EXTS:
+    for input_dir in INPUT_DIRS:
+        if not input_dir.is_dir():
             continue
-        out_path = OUTPUT_DIR / f"{p.stem}.md"
-        if not out_path.exists():
-            files.append(p)
+        for p in sorted(input_dir.iterdir()):
+            if p.suffix.lower() not in AUDIO_EXTS:
+                continue
+            out_path = OUTPUT_DIR / f"{p.stem}.md"
+            if not out_path.exists():
+                files.append(p)
     return files
 
 
