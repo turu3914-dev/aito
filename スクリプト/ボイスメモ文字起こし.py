@@ -1,12 +1,12 @@
 """
-voice_memos/ にある未処理の音声ファイルを文字起こしし、
-notes/voice/<ファイル名>.md に書き出す。
+音声メモ/ にある未処理の音声ファイルを文字起こしし、
+記録/音声/<ファイル名>.md に書き出す。
 
 使い方:
-    python scripts/transcribe_voice_memos.py
+    python スクリプト/ボイスメモ文字起こし.py
 
 要約や補足はこのスクリプトでは行わない。文字起こし結果を
-Claude に読ませて、notes/summary.md 等に要約を書かせる想定。
+Claude に読ませて、記録/要約.md 等に要約を書かせる想定。
 """
 
 import sys
@@ -16,8 +16,8 @@ from datetime import datetime
 AUDIO_EXTS = {".m4a", ".mp3", ".wav", ".mp4", ".ogg", ".flac", ".aac", ".wma"}
 
 ROOT = Path(__file__).resolve().parent.parent
-INPUT_DIR = ROOT / "voice_memos"
-OUTPUT_DIR = ROOT / "notes" / "voice"
+INPUT_DIR = ROOT / "音声メモ"
+OUTPUT_DIR = ROOT / "記録" / "音声"
 
 
 def find_unprocessed():
